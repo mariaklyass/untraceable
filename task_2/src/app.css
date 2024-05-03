@@ -35,10 +35,6 @@ h1 {
   line-height: 1.1;
 }
 
-.card {
-  padding: 2em;
-}
-
 #app {
   max-width: 1280px;
   margin: 0 auto;
@@ -46,7 +42,9 @@ h1 {
   text-align: center;
 }
 
-button {
+input,
+select,
+span {
   border-radius: 8px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
@@ -57,23 +55,37 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 }
-button:hover {
+input:hover {
   border-color: #646cff;
 }
-button:focus,
-button:focus-visible {
+input:focus,
+input:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+.wrapper {
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.form {
+  padding: 3rem;
+  background: rgba(132, 121, 121, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(132, 121, 121, 0.3);
+}
+.exchange {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  padding: 1rem;
+}
+.reference {
+  font-size: 0.8rem;
 }

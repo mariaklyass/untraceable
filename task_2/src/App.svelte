@@ -78,10 +78,12 @@
   });
 </script>
 
-<main>
+<main class="wrapper">
   <h1>Конвертатор валют</h1>
-  <label>
-    Валюта 1:
+  <form class="form">
+  <div class="exchange">
+  <label class="currency">
+    <span>Валюта 1:</span>
     <select bind:value={selectedCurrency1} on:change={calculateConversion}>
       {#each currencyOptions as currency}
         <option value={currency}>{currencyNames[currency]}</option>
@@ -90,8 +92,8 @@
     <input type="number" bind:value={inputValue1} on:input={calculateConversion} min="0" on:input={handleInput} />
   </label>
 
-  <label>
-    Валюта 2:
+  <label class="currency">
+   <span>Валюта 2:</span> 
     <select bind:value={selectedCurrency2} on:change={calculateConversion2}>
       {#each currencyOptions as currency}
         <option value={currency}>{currencyNames[currency]}</option>
@@ -99,7 +101,7 @@
     </select>
     <input type="number" bind:value={inputValue2} on:input={calculateConversion2} min="0" on:input={handleInput} />
   </label>
-
+</div>
   <p>
     {#if currentRate}
       <div>{currentRate}</div>
@@ -107,9 +109,10 @@
       <div>Loading...</div>
     {/if}
   </p>
-
-  <p>
+</form>
+  <p class="reference">
     Приложение использует
-    <a href="https://www.exchangerate-api.com">Exchange Rate API</a>
+    <a href="https://www.exchangerate-api.com" target="_blank">Exchange Rate API</a>
   </p>
+  
 </main>
