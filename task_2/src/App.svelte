@@ -1,39 +1,40 @@
 <script lang='ts'>
-import currencyNames from './currenciesRU.ts';
-
-import { onMount } from 'svelte';
+  import currencyNames from './currenciesRU.ts';
+  import { onMount } from 'svelte';
 
   const getCurrencyOptions = async () => {
-    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-    const targetUrl = 'https://open.er-api.com/v6/latest/USD';
-    const response = await fetch(proxyUrl + targetUrl);
-    return response.json();
+    try {
+      const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+      const targetUrl = 'https://open.er-api.com/v6/latest/USD';
+      const response = await fetch(proxyUrl + targetUrl);
+      if (!response.ok) {
+        throw new Error('Failed to fetch currency data');
+      }
+      return response.json();
+    } catch (error) {
+      console.error(error);
+      return { result: 'error' };
+    }
   }
 
   let currencyOptions = [];
   let rates = {};
-
   let selectedCurrency1 = 'USD';
   let selectedCurrency2 = 'RUB';
   let inputValue1 = '';
   let inputValue2 = '';
+  let currentRate = '';
 
-  // Reactive statement to log changes in inputValue1 and inputValue2
   $: console.log(`Input value 1 changed: ${inputValue1}`);
   $: console.log(`Input value 2 changed: ${inputValue2}`);
-
-  let currentRate = '';
 
   const calculateConversion = () => {
     if (selectedCurrency1 === selectedCurrency2) {
       inputValue2 = inputValue1;
     } else {
-      let result = inputValue1 * rates[selectedCurrency2];
-      if (result <= 0) {
-        inputValue2 = '';
-      } else {
-        inputValue2 = result.toFixed(2);
-      }
+      const rate = (rates[selectedCurrency2] / rates[selectedCurrency1]).toFixed(2);
+      console.log("rate:", rate);
+      inputValue2 = (inputValue1 * rate).toFixed(2);
     }
     calculateRate();
   }
@@ -42,12 +43,9 @@ import { onMount } from 'svelte';
     if (selectedCurrency1 === selectedCurrency2) {
       inputValue1 = inputValue2;
     } else {
-      let result = inputValue2 / rates[selectedCurrency2];
-      if (result <= 0) {
-        inputValue1 = '';
-      } else {
-        inputValue1 = result.toFixed(2);
-      }
+      const rate = (rates[selectedCurrency2] / rates[selectedCurrency1]).toFixed(2);
+      console.log("rate:", rate);
+      inputValue1 = (inputValue2 / rate).toFixed(2);
     }
     calculateRate();
   }
@@ -74,13 +72,15 @@ import { onMount } from 'svelte';
     if (response.result === 'success') {
       currencyOptions = Object.keys(response.rates);
       rates = response.rates;
+      calculateRate(); // Call calculateRate initially
+    } else {
+      console.error('Failed to fetch currency options');
     }
-    calculateRate(); // Initial calculation
   });
 </script>
 
 <main>
-<h1>Конвертатор валют</h1>
+  <h1>Конвертатор валют</h1>
   <label>
     Валюта 1:
     <select bind:value={selectedCurrency1} on:change={calculateConversion}>
@@ -102,8 +102,15 @@ import { onMount } from 'svelte';
   </label>
 
   <p>
-  {#if currentRate}
-    <div>{currentRate}</div>
-  {/if}
+    {#if currentRate}
+      <div>{currentRate}</div>
+    {:else}
+      <div>Loading...</div>
+    {/if}
+  </p>
+
+  <p>
+    Приложение использует
+    <a href="https://www.exchangerate-api.com">Exchange Rate API</a>
   </p>
 </main>
