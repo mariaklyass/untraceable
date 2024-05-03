@@ -1,5 +1,7 @@
 <script lang='ts'>
-  import { onMount } from 'svelte';
+import currencyNames from './currenciesRU.ts';
+
+import { onMount } from 'svelte';
 
   const getCurrencyOptions = async () => {
     const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
@@ -83,7 +85,7 @@
     Валюта 1:
     <select bind:value={selectedCurrency1} on:change={calculateConversion}>
       {#each currencyOptions as currency}
-        <option value="{currency}">{currency}</option>
+        <option value={currency}>{currencyNames[currency]}</option>
       {/each}
     </select>
     <input type="number" bind:value={inputValue1} on:input={calculateConversion} min="0" on:input={handleInput} />
@@ -93,7 +95,7 @@
     Валюта 2:
     <select bind:value={selectedCurrency2} on:change={calculateConversion2}>
       {#each currencyOptions as currency}
-        <option value="{currency}">{currency}</option>
+        <option value={currency}>{currencyNames[currency]}</option>
       {/each}
     </select>
     <input type="number" bind:value={inputValue2} on:input={calculateConversion2} min="0" on:input={handleInput} />
