@@ -1,4 +1,4 @@
-<script>
+<script lang='ts'>
   import { onMount } from 'svelte';
 
   const getCurrencyOptions = async () => {
@@ -26,7 +26,12 @@
     if (selectedCurrency1 === selectedCurrency2) {
       inputValue2 = inputValue1;
     } else {
-      inputValue2 = (inputValue1 * rates[selectedCurrency2]).toFixed(2);
+      let result = inputValue1 * rates[selectedCurrency2];
+      if (result <= 0) {
+        inputValue2 = '';
+      } else {
+        inputValue2 = result.toFixed(2);
+      }
     }
     calculateRate();
   }
@@ -35,7 +40,12 @@
     if (selectedCurrency1 === selectedCurrency2) {
       inputValue1 = inputValue2;
     } else {
-      inputValue1 = (inputValue2 / rates[selectedCurrency2]).toFixed(2);
+      let result = inputValue2 / rates[selectedCurrency2];
+      if (result <= 0) {
+        inputValue1 = '';
+      } else {
+        inputValue1 = result.toFixed(2);
+      }
     }
     calculateRate();
   }
@@ -46,6 +56,14 @@
     } else {
       const rate = (rates[selectedCurrency2] / rates[selectedCurrency1]).toFixed(2);
       currentRate = `Текущий курс: 1 ${selectedCurrency1} = ${rate} ${selectedCurrency2}`;
+    }
+  }
+
+
+  const handleInput = (event) => {
+    if (!/^\d*\.?\d*$/.test(event.target.value)) {
+      event.preventDefault();
+      event.target.value = '';
     }
   }
 
@@ -68,7 +86,7 @@
         <option value="{currency}">{currency}</option>
       {/each}
     </select>
-    <input type="number" bind:value={inputValue1} on:input={calculateConversion} />
+    <input type="number" bind:value={inputValue1} on:input={calculateConversion} min="0" on:input={handleInput} />
   </label>
 
   <label>
@@ -78,7 +96,7 @@
         <option value="{currency}">{currency}</option>
       {/each}
     </select>
-    <input type="number" bind:value={inputValue2} on:input={calculateConversion2} />
+    <input type="number" bind:value={inputValue2} on:input={calculateConversion2} min="0" on:input={handleInput} />
   </label>
 
   <p>
