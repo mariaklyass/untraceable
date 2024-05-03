@@ -85,6 +85,14 @@ input:focus-visible {
   align-items: center;
   gap: 2rem;
   padding: 1rem;
+  @media (max-width: 950px) {
+    .currency {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+  }
 }
 .reference {
   font-size: 0.8rem;
