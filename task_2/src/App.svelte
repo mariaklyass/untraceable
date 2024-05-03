@@ -4,9 +4,8 @@
 
   const getCurrencyOptions = async () => {
     try {
-      const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
       const targetUrl = 'https://open.er-api.com/v6/latest/USD';
-      const response = await fetch(proxyUrl + targetUrl);
+      const response = await fetch(targetUrl);
       if (!response.ok) {
         throw new Error('Failed to fetch currency data');
       }
