@@ -59,12 +59,15 @@
   }
 
 
-  const handleInput = (event) => {
+   const handleInput = (event) => {
     if (!/^\d*\.?\d*$/.test(event.target.value)) {
       event.preventDefault();
       event.target.value = '';
+    } else {
+      event.target.value = !!event.target.value && Math.abs(event.target.value) >= 0 ? Math.abs(event.target.value) : null;
     }
   }
+
 
   onMount(async () => {
     const response = await getCurrencyOptions();
